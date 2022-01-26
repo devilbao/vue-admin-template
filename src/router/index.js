@@ -46,49 +46,75 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/index',
     children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      path: 'index',
+      name: 'index',
+      component: () => import('@/views/home/index'),
+      meta: { title: '首页', icon: 'dashboard' }
     }]
   },
 
   {
-    path: '/example',
+    path: '/gruop-1',
     component: Layout,
-    redirect: '/example/table',
+    redirect: '/gruop-1/gruop-1-1',
     name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
+    meta: { title: '分组一', icon: 'el-icon-s-help' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        path: 'gruop-1-1',
+        name: 'gruop-1-1',
+        component: () => import('@/views/gruop-1/gruop-1-1'),
+        meta: { title: '子菜单1', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
+        path: 'gruop-1-2',
+        name: 'gruop-1-2',
+        component: () => import('@/views/gruop-1/gruop-1-2'),
+        meta: { title: '子菜单2', icon: 'table' }
+      },
+    
+    ]
+  },
+  {
+    path: '/gruop-2',
+    component: Layout,
+    redirect: '/gruop-2/gruop-2-1',
+    name: 'Example',
+    meta: { title: '分组二', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: 'gruop-2-1',
+        name: 'gruop-2-1',
+        component: () => import('@/views/gruop-2/gruop-2-1'),
+        meta: { title: '子菜单1', icon: 'table' }
+      },
+      {
+        path: 'gruop-2-2',
+        name: 'gruop-2-2',
+        component: () => import('@/views/gruop-2/gruop-2-2/index.vue'),
+        meta: { title: '子菜单2', icon: 'table' },
+        children:[
+          {
+            path: 'gruop-2-2-1',
+            name: 'gruop-2-2-1',
+            component: () => import('@/views/gruop-2/gruop-2-2/gruop-2-2-1'),
+            meta: { title: '子菜单的子菜单1', icon: 'table' }
+          },
+          {
+            path: 'gruop-2-2-2',
+            name: 'gruop-2-2-2',
+            component: () => import('@/views/gruop-2/gruop-2-2/gruop-2-2-2'),
+            meta: { title: '子菜单的子菜单2', icon: 'table' }
+          },
+        ]
+      },
+    
     ]
   },
 
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
+
 
   {
     path: '/nested',
@@ -149,16 +175,16 @@ export const constantRoutes = [
     ]
   },
 
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
-  },
+  // {
+  //   path: 'external-link',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
+  //       meta: { title: 'External Link', icon: 'link' }
+  //     }
+  //   ]
+  // },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
