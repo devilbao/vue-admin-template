@@ -1,6 +1,6 @@
 <template>
   <div>
-      子菜单1
+    子菜单2
   </div>
 </template>
 

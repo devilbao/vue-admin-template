@@ -1,6 +1,6 @@
 <template>
   <div>
-      子菜单2-1
+    关键词管理子菜单
   </div>
 </template>
 

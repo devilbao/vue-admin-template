@@ -36,155 +36,47 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
-
   {
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
   },
-
   {
     path: '/',
     component: Layout,
     redirect: '/index',
-    children: [{
-      path: 'index',
-      name: 'index',
-      component: () => import('@/views/home/index'),
-      meta: { title: '首页', icon: 'dashboard' }
-    }]
-  },
-
-  {
-    path: '/gruop-1',
-    component: Layout,
-    redirect: '/gruop-1/gruop-1-1',
-    name: 'Example',
-    meta: { title: '分组一', icon: 'el-icon-s-help' },
+    meta: { title: '基础信息管理', icon: 'nested' },
     children: [
       {
-        path: 'gruop-1-1',
-        name: 'gruop-1-1',
-        component: () => import('@/views/gruop-1/gruop-1-1'),
-        meta: { title: '子菜单1', icon: 'table' }
+        path: 'index',
+        component: () => import('@/views/baseSetting/term'),
+        meta: { title: '关键词管理' }
       },
       {
-        path: 'gruop-1-2',
-        name: 'gruop-1-2',
-        component: () => import('@/views/gruop-1/gruop-1-2'),
-        meta: { title: '子菜单2', icon: 'table' }
-      },
-    
-    ]
-  },
-  {
-    path: '/gruop-2',
-    component: Layout,
-    redirect: '/gruop-2/gruop-2-1',
-    name: 'Example',
-    meta: { title: '分组二', icon: 'el-icon-s-help' },
-    children: [
-      {
-        path: 'gruop-2-1',
-        name: 'gruop-2-1',
-        component: () => import('@/views/gruop-2/gruop-2-1'),
-        meta: { title: '子菜单1', icon: 'table' }
-      },
-      {
-        path: 'gruop-2-2',
-        name: 'gruop-2-2',
-        component: () => import('@/views/gruop-2/gruop-2-2/index.vue'),
-        meta: { title: '子菜单2', icon: 'table' },
-        children:[
-          {
-            path: 'gruop-2-2-1',
-            name: 'gruop-2-2-1',
-            component: () => import('@/views/gruop-2/gruop-2-2/gruop-2-2-1'),
-            meta: { title: '子菜单的子菜单1', icon: 'table' }
-          },
-          {
-            path: 'gruop-2-2-2',
-            name: 'gruop-2-2-2',
-            component: () => import('@/views/gruop-2/gruop-2-2/gruop-2-2-2'),
-            meta: { title: '子菜单的子菜单2', icon: 'table' }
-          },
-        ]
-      },
-    
-    ]
-  },
-
-
-
-  {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
-      },
-      {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        name: 'Menu2',
-        meta: { title: 'menu2' }
+        path: 'company',
+        component: () => import('@/views/baseSetting/company'),
+        meta: { title: '企业信息管理' }
       }
     ]
   },
-
-  // {
-  //   path: 'external-link',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-  //       meta: { title: 'External Link', icon: 'link' }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/sys',
+    component: Layout,
+    redirect: '/sys/index',
+    meta: { title: '系统管理', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: 'adConfig',
+        component: () => import('@/views/sys/adConfig'),
+        meta: { title: '广告配置' }
+      },
+      {
+        path: 'msgConfig',
+        component: () => import('@/views/sys/msgConfig'),
+        meta: { title: '短信配置' }
+      }
+    ]
+  },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
