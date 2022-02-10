@@ -15,6 +15,9 @@ service.interceptors.request.use(
   config => {
     // do something before request is sent
 
+    config.headers['Content-Type'] = 'application/json'
+    config.data=JSON.stringify(config.data);
+    console.log(config.data,"config.data")
     if (store.getters.token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key

@@ -35,12 +35,12 @@ module.exports = {
   devServer: {
     port: port,
     open: true,
-    proxy: 'http://localhost:8080', // 配置跨域处理,只有一个代理
+    proxy: 'http://192.168.2.46:8080', // 配置跨域处理,只有一个代理
     overlay: {
       warnings: false,
       errors: true
     },
-    before: require('./mock/mock-server.js')
+    // before: require('./mock/mock-server.js')
   },
 
   configureWebpack: {

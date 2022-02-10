@@ -1,18 +1,18 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+    <el-form ref="loginForm" :model="loginForm"  class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
         <h3 class="title">Login Form</h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="phone">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
           ref="username"
-          v-model="loginForm.username"
+          v-model="loginForm.phone"
           placeholder="Username"
           name="username"
           type="text"
@@ -21,26 +21,22 @@
         />
       </el-form-item>
 
-      <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password" />
-        </span>
-        <el-input
-          :key="passwordType"
-          ref="password"
-          v-model="loginForm.password"
-          :type="passwordType"
-          placeholder="Password"
-          name="password"
-          tabindex="2"
-          auto-complete="on"
-          @keyup.enter.native="handleLogin"
-        />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-        </span>
-      </el-form-item>
-
+      
+        <el-form-item prop="code">
+          <span class="svg-container">
+            <svg-icon icon-class="password" />
+          </span>
+          <el-input
+            ref="password"
+            v-model="loginForm.code"
+           
+            @keyup.enter.native="handleLogin"
+          />
+          <el-button class="getCode" @click="getCode">获取验证码</el-button>
+          <!-- <span class="show-pwd" @click="showPwd">
+            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          </span> -->
+        </el-form-item>
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
       <div class="tips">
@@ -54,19 +50,21 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
+import { getCode } from '@/api/home'
 
 export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
+      // if (!validUsername(value)) {
+      //   callback(new Error('Please enter the correct user name'))
+      // } else {
+      //   callback()
+      // }
+      callback()
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
+      if (value.length < 5) {
         callback(new Error('The password can not be less than 6 digits'))
       } else {
         callback()
@@ -74,13 +72,13 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        phone: '18515373231',
+        code: '111111'
       },
-      loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
-      },
+      // loginRules: {
+      //   phone: [{ required: true, trigger: 'blur', validator: validateUsername }],
+      //   code: [{ required: true, trigger: 'blur', validator: validatePassword }]
+      // },
       loading: false,
       passwordType: 'password',
       redirect: undefined
@@ -95,6 +93,13 @@ export default {
     }
   },
   methods: {
+    getCode(){
+      getCode({phone:this.loginForm.phone}).then(res=>{
+          if(res.success){
+            alert(res.result)
+          }
+      })
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -107,6 +112,7 @@ export default {
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
+        console.log(valid)
         if (valid) {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm).then(() => {
@@ -233,5 +239,9 @@ $light_gray:#eee;
     cursor: pointer;
     user-select: none;
   }
+}
+.getCode{
+  position: absolute;
+  right: 10px;top:6px;
 }
 </style>
