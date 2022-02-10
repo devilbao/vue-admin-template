@@ -24,6 +24,9 @@ module.exports = {
    * In most cases please use '/' !!!
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
+
+
+  
   publicPath: '/',
   outputDir: 'dist',
   assetsDir: 'static',
@@ -32,12 +35,14 @@ module.exports = {
   devServer: {
     port: port,
     open: true,
+    proxy: 'http://localhost:8080', // 配置跨域处理,只有一个代理
     overlay: {
       warnings: false,
       errors: true
     },
     before: require('./mock/mock-server.js')
   },
+
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
