@@ -41,6 +41,7 @@ module.exports = [
       }
 
       return {
+        success:true,
         code: 20000,
         data: token
       }
@@ -64,6 +65,7 @@ module.exports = [
       }
 
       return {
+        success:true,
         code: 20000,
         data: info
       }
@@ -76,6 +78,7 @@ module.exports = [
     type: 'post',
     response: _ => {
       return {
+        success:true,
         code: 20000,
         data: 'success'
       }
