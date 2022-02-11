@@ -15,9 +15,9 @@ service.interceptors.request.use(
   config => {
     // do something before request is sent
 
-    config.headers['Content-Type'] = 'application/json'
-    config.data=JSON.stringify(config.data);
-    console.log(config.data,"config.data")
+    // config.headers['Content-Type'] = 'application/json'
+    // config.data=JSON.stringify(config.data);
+    // console.log(config.data,"config.data")
     if (store.getters.token) {
       // let each request carry token
       // ['Token'] is a custom headers key
@@ -49,7 +49,7 @@ service.interceptors.response.use(
     const res = response.data
 
     // if the custom code is not 20000, it is judged as an error.
-    if (!res.success) {
+    if (res.success==false) {
       Message({
         message: res.message || 'Error',
         type: 'error',

@@ -14,7 +14,9 @@
 .el-upload__input {
   display: none;
 }
-
+.el-upload{
+  border: 1px dashed #d9d9d9;
+}
 
 // to fixed https://github.com/ElemeFE/element/issues/2461
 .el-dialog {

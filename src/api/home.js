@@ -7,3 +7,18 @@ export function getCode(data) {
     params: data
   })
 }
+export function download(data) {
+  return request({
+    url: '/file/download',
+    method: 'get',
+    responseType: 'arraybuffer',
+    params: data
+  })
+}
+export function upload(data) {
+  return request({
+    url: '/file/upload',
+    method: 'post',
+    data: data
+  })
+}
