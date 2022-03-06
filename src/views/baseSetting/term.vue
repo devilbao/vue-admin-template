@@ -1,5 +1,6 @@
 <template>
   <div>
+    
     <div>
       <el-form :inline="true" :model="form" class="demo-form-inline" label-width='80px'>
         <el-row :gutter="10">
@@ -29,6 +30,8 @@
         </el-row>
       </el-form>
     </div>
+
+    <el-button type="primary" @click="add()">新增</el-button>
 
     <el-table :data="tableData" style="width: 100%">
       <el-table-column type="index" width="50" label="序号"></el-table-column>
@@ -80,7 +83,7 @@
     <el-dialog :title="title" :visible.sync="editFlag" width="30%" center @close="close">
       <el-form :model="data_form" ref="data_form">
         <el-form-item label="关键词">
-          <el-input disabled v-model="data_form.word"></el-input>
+          <el-input :disabled="title=='编辑'" v-model="data_form.word"></el-input>
         </el-form-item>
         <el-form-item label="图标">
           <imgUpload v-model="data_form.icon"></imgUpload>
@@ -106,7 +109,7 @@
 </template>
 
 <script>
-import { list, changeStatus, update,deleteA } from "@/api/term";
+import { list, changeStatus, update,deleteA,add } from "@/api/term";
 import imgUpload from '@/components/imgUpload'
 export default {
   components:{
@@ -133,6 +136,15 @@ export default {
     };
   },
   methods: {
+    add(){
+      this.title="新增"
+      this.data_form={
+        word: null, // 关键词
+        icon:null,
+      }
+      this.editFlag=true;
+
+    },
     del(row){
       this.$confirm('确定要删除吗？', '确认框', {
           confirmButtonText: '确定',
@@ -154,13 +166,24 @@ export default {
       console.log(this.data_form,'data_form')
     },
     sure() {
-      update(this.data_form).then(res=>{
+       if ((this.title == "新增")) {
+        add(this.data_form).then((res) => {
+          if (res.success) {
+            this.editFlag = false;
+            this.search();
+            this.$message.success("操作成功");
+          }
+        });
+      } else {
+        update(this.data_form).then(res=>{
         if(res.success){
           this.$message.success('操作成功')
           this.search();
           this.editFlag = false;
         }
       })
+      }
+      
     },
     changeStatus(id) {
       changeStatus(id).then((response) => {
