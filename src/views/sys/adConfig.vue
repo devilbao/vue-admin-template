@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button type="primary" @click="add()">新增</el-button>
-    <el-table :data="tableData" style="width: 100%">
+    <el-table v-loading="loading" :data="tableData" style="width: 100%">
       <el-table-column type="index" width="50" label="序号"></el-table-column>
       <el-table-column
         prop="linkPath"
@@ -128,6 +128,7 @@ export default {
   },
   data() {
     return {
+      loading:false,
       preViewImgFlag: false,
       preViewImgSrc: "",
       title: "",
@@ -219,8 +220,11 @@ export default {
       });
     },
     search() {
+       this.loading=true;
       list({ ...this.paginationOption }).then((res) => {
+         this.loading=false;
         if (res.success) {
+          
           this.tableData = res.result.data;
         }
       });

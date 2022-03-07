@@ -31,7 +31,7 @@
       </el-form-item>
     </el-form>
 
-    <el-table :data="tableData" style="width: 100%">
+    <el-table  v-loading="loading" :data="tableData" style="width: 100%">
       <el-table-column type="index" width="50" label="序号"></el-table-column>
       <el-table-column
         prop="createdTime"
@@ -39,11 +39,12 @@
         width="200"
       ></el-table-column>
       <el-table-column
+      :show-overflow-tooltip="true"
         prop="entName"
         label="企业名称"
-        width="200"
+        width="250"
       ></el-table-column>
-      <el-table-column prop="introduction" label="企业简介"></el-table-column>
+      <el-table-column :show-overflow-tooltip="true" prop="introduction" label="企业简介" ></el-table-column>
       <el-table-column label="操作" align="center" width="80">
         <template slot-scope="scope">
           <el-button type="text" @click="info(scope.row)" size="small"
@@ -112,6 +113,7 @@ import { listCompany,listProvince,getCompany } from "@/api/company";
 export default {
   data() {
     return {
+      loading:false,
       title:'',
       infoFlag:false,
       tableData:[],
@@ -149,7 +151,9 @@ export default {
       this.search();
     },
     search() {
+       this.loading=true;
       listCompany({...this.form,...this.paginationOption}).then((res) => {
+         this.loading=false;
         if (res.success) {
           this.tableData = res.result.data;
           this.paginationOption.total = res.result.count;
@@ -173,5 +177,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped lang="scss">
+ .el-tooltip__popper{
+  max-width:50%;
+}
 </style>

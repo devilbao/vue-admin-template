@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button type="primary" @click="add()">新增</el-button>
-    <el-table :data="tableData" style="width: 100%" >
+    <el-table v-loading="loading" :data="tableData" style="width: 100%" >
       <el-table-column type="index" width="50" label="序号"></el-table-column>
       
       <el-table-column prop="signName" label="签名公司"></el-table-column>
@@ -25,7 +25,7 @@
         <template slot-scope="scope">
           <el-button
           
-            type="text"
+            type="text"  
             @click="handleEdit(scope.row)"
             size="small"
             >编辑</el-button
@@ -105,6 +105,7 @@ import { list,changeStatus,add,update,deleteA } from "@/api/msgConfig";
 export default {
   data() {
     return {
+       loading:false,
        paginationOption: {
         pageNum: 1,
         pageSize: 10,
@@ -203,6 +204,7 @@ export default {
       }
     },
     changeStatus(id) {
+      
       changeStatus(id).then((response) => {
         this.search();
       }).catch((e)=>{
@@ -210,7 +212,9 @@ export default {
       })
     },
     search() {
+        this.loading=true;
       list({...this.paginationOption}).then((res) => {
+          this.loading=false;
         if (res.success) {
           this.tableData=res.result.data;
         }

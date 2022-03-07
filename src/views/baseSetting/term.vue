@@ -37,7 +37,7 @@
 
     <el-button type="primary" @click="add()">新增</el-button>
 
-    <el-table :data="tableData" style="width: 100%">
+    <el-table v-loading="loading" :data="tableData" style="width: 100%" >
       <el-table-column type="index" width="50" label="序号"></el-table-column>
       <el-table-column prop="word" label="关键词" width="200">
       </el-table-column>
@@ -152,6 +152,7 @@ export default {
   },
   data() {
     return {
+      loading:false,
       data_form: {
         word: null, // 关键词
         icon: null,
@@ -244,7 +245,9 @@ export default {
     },
     //搜索方法
     search() {
+      this.loading=true;
       list({ ...this.form, ...this.paginationOption }).then((response) => {
+         this.loading=false;
         if (response.success == true) {
           this.tableData = response.result.data;
           this.paginationOption.total = response.result.count;
