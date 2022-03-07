@@ -5,8 +5,8 @@
       <el-table-column type="index" width="50" label="序号"></el-table-column>
       
       <el-table-column prop="signName" label="签名公司"></el-table-column>
-      <el-table-column prop="sendTimeInterval" label="验证码发送最小间隔（毫秒）"></el-table-column>
-      <el-table-column prop="expirationTimeInterval" label="验证码过期时间（毫秒）"></el-table-column>
+      <el-table-column prop="sendTimeInterval" width="190" label="短信发送最小间隔（毫秒）"></el-table-column>
+      <el-table-column prop="expirationTimeInterval" width="190" label="验证码过期时间（毫秒）"></el-table-column>
       <el-table-column prop="accessKeyId" label="accessKeyId"></el-table-column>
       <el-table-column prop="accessKeySecret" label="accessKeySecret"></el-table-column>
        <el-table-column label="是否有效" align="center">
@@ -32,7 +32,7 @@
           >
           <el-button
             style="color: red"
-            v-if="!scope.row.isEnabled"
+            v-if="scope.row.isEnabled"
             type="text"
             @click="del(scope.row)"
             size="small"
@@ -45,7 +45,7 @@
      <el-dialog
       :title="title"
       :visible.sync="editFlag"
-      width="600"
+      width="800px"
       center
       @close="close()"
       v-if="editFlag"
@@ -128,6 +128,11 @@ export default {
     };
   },
   methods: {
+    pageChange(pageNum) {
+      console.log(pageNum);
+      this.paginationOption.pageNum = pageNum;
+      this.search();
+    },
     del(row) {
       this.$confirm("确定要删除吗？", "确认框", {
         confirmButtonText: "确定",
@@ -199,10 +204,10 @@ export default {
     },
     changeStatus(id) {
       changeStatus(id).then((response) => {
-        if (response.success == true) {
-          this.search();
-        }
-      });
+        this.search();
+      }).catch((e)=>{
+        this.search();
+      })
     },
     search() {
       list({...this.paginationOption}).then((res) => {

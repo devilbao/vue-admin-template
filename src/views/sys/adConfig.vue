@@ -8,7 +8,13 @@
         label="链接地址"
         width="200"
       ></el-table-column>
-      <el-table-column prop="filePath" label="文件名称"></el-table-column>
+      <el-table-column prop="filePath" label="图片">
+        <template slot-scope="scope">
+          <el-button type="text" @click="fileLook(scope.row.filePath)"
+            >查看</el-button
+          >
+        </template>
+      </el-table-column>
       <el-table-column prop="type" label="类型" :formatter="typeFormat">
       </el-table-column>
       <el-table-column label="状态" align="center">
@@ -52,29 +58,24 @@
       @close="close"
       v-if="editFlag"
     >
-
       <el-form :model="data_form" ref="data_form2" label-width="150px">
         <el-form-item label="链接地址">
-          <el-input style="width:400px" v-model.trim="data_form.linkPath"></el-input>
+          <el-input
+            style="width: 400px"
+            v-model.trim="data_form.linkPath"
+          ></el-input>
         </el-form-item>
         <el-form-item label="类型">
           <el-select v-model.trim="data_form.type" placeholder="请选择">
-            <el-option
-              
-              label="横幅广告"
-              :value="1"
-            >
-            </el-option>
-            <el-option
-              
-              label="轮播广告"
-              :value="2"
-            >
-            </el-option>
+            <el-option label="横幅广告" :value="1"> </el-option>
+            <el-option label="轮播广告" :value="2"> </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="顺序" v-if="data_form.type==2">
-          <el-input style="width:100px" v-model.trim="data_form.orders"></el-input>
+        <el-form-item label="顺序" v-if="data_form.type == 2">
+          <el-input
+            style="width: 100px"
+            v-model.trim="data_form.orders"
+          ></el-input>
         </el-form-item>
         <el-form-item label="图片">
           <imgUpload v-model.trim="data_form.filePath"></imgUpload>
@@ -88,7 +89,6 @@
           >
           </el-switch>
         </el-form-item> -->
-        
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="editFlag = false">取 消</el-button>
@@ -96,7 +96,7 @@
       </span>
     </el-dialog>
 
-    <div style="text-align:right">
+    <div style="text-align: right">
       <el-pagination
         background
         layout="prev, pager, next"
@@ -107,11 +107,20 @@
       >
       </el-pagination>
     </div>
+
+    <el-dialog
+      title="图片预览"
+      :visible.sync="preViewImgFlag"
+      center
+    >
+      <img style="width:100%" :src="preViewImgSrc" alt="" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import imgUpload from "@/components/imgUpload";
+import { upload, download } from "@/api/home";
 import { list, changeStatus, update, deleteA, add } from "@/api/adConfig";
 export default {
   components: {
@@ -119,6 +128,8 @@ export default {
   },
   data() {
     return {
+      preViewImgFlag: false,
+      preViewImgSrc: "",
       title: "",
       editFlag: false,
       tableData: [],
@@ -165,7 +176,7 @@ export default {
         .catch(() => {});
     },
     sure() {
-      if ((this.title == "新增")) {
+      if (this.title == "新增") {
         add(this.data_form).then((res) => {
           if (res.success) {
             this.editFlag = false;
@@ -196,6 +207,16 @@ export default {
           return "轮播广告";
           break;
       }
+    },
+    fileLook(filePath) {
+      download({ fileName: filePath }).then((res) => {
+        const blob = new Blob([res], {
+          type: "application/png;charset=utf-8",
+        });
+        const url = window.URL.createObjectURL(blob);
+        this.preViewImgSrc = url;
+        this.preViewImgFlag = true;
+      });
     },
     search() {
       list({ ...this.paginationOption }).then((res) => {

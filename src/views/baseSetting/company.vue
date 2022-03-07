@@ -34,6 +34,11 @@
     <el-table :data="tableData" style="width: 100%">
       <el-table-column type="index" width="50" label="序号"></el-table-column>
       <el-table-column
+        prop="createdTime"
+        label="创建时间"
+        width="200"
+      ></el-table-column>
+      <el-table-column
         prop="entName"
         label="企业名称"
         width="200"

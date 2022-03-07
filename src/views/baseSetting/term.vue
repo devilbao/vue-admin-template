@@ -1,8 +1,12 @@
 <template>
   <div>
-    
     <div>
-      <el-form :inline="true" :model="form" class="demo-form-inline" label-width='80px'>
+      <el-form
+        :inline="true"
+        :model="form"
+        class="demo-form-inline"
+        label-width="80px"
+      >
         <el-row :gutter="10">
           <el-col :span="6">
             <el-form-item label="关键词">
@@ -38,6 +42,12 @@
       <el-table-column prop="word" label="关键词" width="200">
       </el-table-column>
       <el-table-column prop="icon" label="图标" align="center">
+        <template slot-scope="scope">
+          <el-button v-if="scope.row.icon!=null" type="text" @click="fileLook(scope.row.icon)"
+            >查看</el-button
+          >
+          <p v-else>--</p>
+        </template>
       </el-table-column>
       <el-table-column label="状态" align="center">
         <template slot-scope="scope">
@@ -61,7 +71,6 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button
-          
             v-if="scope.row.isEnabled"
             type="text"
             @click="handleEdit(scope.row)"
@@ -69,7 +78,7 @@
             >编辑</el-button
           >
           <el-button
-          style="color:red"
+            style="color: red"
             v-if="scope.row.isEnabled"
             type="text"
             @click="del(scope.row)"
@@ -80,10 +89,19 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog :title="title" :visible.sync="editFlag" width="30%" center @close="close">
+    <el-dialog
+      :title="title"
+      :visible.sync="editFlag"
+      width="30%"
+      center
+      @close="close"
+    >
       <el-form :model="data_form" ref="data_form">
         <el-form-item label="关键词">
-          <el-input :disabled="title=='编辑'" v-model="data_form.word"></el-input>
+          <el-input
+            :disabled="title == '编辑'"
+            v-model="data_form.word"
+          ></el-input>
         </el-form-item>
         <el-form-item label="图标">
           <imgUpload v-model="data_form.icon"></imgUpload>
@@ -95,7 +113,7 @@
       </span>
     </el-dialog>
 
-    <el-pagination
+    <!-- <el-pagination
       style="float: right; position: absolute; right: 30px; bottom: 50px"
       background
       layout="prev, pager, next"
@@ -104,22 +122,39 @@
       :hide-on-single-page="true"
       @current-change="pageChange"
     >
-    </el-pagination>
+    </el-pagination> -->
+
+      <div style="text-align:right">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="paginationOption.total"
+        :current-page="paginationOption.pageNum"
+        :hide-on-single-page="true"
+        @current-change="pageChange"
+      >
+      </el-pagination>
+    </div>
+
+    <el-dialog title="图片预览" :visible.sync="preViewImgFlag" center>
+      <img style="width: 100%" :src="preViewImgSrc" alt="" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { list, changeStatus, update,deleteA,add } from "@/api/term";
-import imgUpload from '@/components/imgUpload'
+import { upload, download } from "@/api/home";
+import { list, changeStatus, update, deleteA, add } from "@/api/term";
+import imgUpload from "@/components/imgUpload";
 export default {
-  components:{
-    imgUpload
+  components: {
+    imgUpload,
   },
   data() {
     return {
-      data_form:{
+      data_form: {
         word: null, // 关键词
-        icon:null,
+        icon: null,
       },
       title: "",
       editFlag: false,
@@ -133,40 +168,51 @@ export default {
         enabled: null, // 是否生效
         word: null, // 关键词
       },
+      preViewImgSrc: "",
+      preViewImgFlag: false,
     };
   },
   methods: {
-    add(){
-      this.title="新增"
-      this.data_form={
+    fileLook(filePath) {
+      download({ fileName: filePath }).then((res) => {
+        const blob = new Blob([res], {
+          type: "application/png;charset=utf-8",
+        });
+        const url = window.URL.createObjectURL(blob);
+        this.preViewImgSrc = url;
+        this.preViewImgFlag = true;
+      });
+    },
+    add() {
+      this.title = "新增";
+      this.data_form = {
         word: null, // 关键词
-        icon:null,
-      }
-      this.editFlag=true;
-
+        icon: null,
+      };
+      this.editFlag = true;
     },
-    del(row){
-      this.$confirm('确定要删除吗？', '确认框', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(()=>{
-            deleteA(row.id).then(res=>{
-              if(res.success){
-                this.search();
-                this.$message.success('删除成功')
-              }
-            })
-        }).catch(()=>{
-          
+    del(row) {
+      this.$confirm("确定要删除吗？", "确认框", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          deleteA(row.id).then((res) => {
+            if (res.success) {
+              this.search();
+              this.$message.success("删除成功");
+            }
+          });
         })
+        .catch(() => {});
     },
-    close(){
-      this.$refs['data_form'].resetFields();
-      console.log(this.data_form,'data_form')
+    close() {
+      this.$refs["data_form"].resetFields();
+      console.log(this.data_form, "data_form");
     },
     sure() {
-       if ((this.title == "新增")) {
+      if (this.title == "新增") {
         add(this.data_form).then((res) => {
           if (res.success) {
             this.editFlag = false;
@@ -175,15 +221,14 @@ export default {
           }
         });
       } else {
-        update(this.data_form).then(res=>{
-        if(res.success){
-          this.$message.success('操作成功')
-          this.search();
-          this.editFlag = false;
-        }
-      })
+        update(this.data_form).then((res) => {
+          if (res.success) {
+            this.$message.success("操作成功");
+            this.search();
+            this.editFlag = false;
+          }
+        });
       }
-      
     },
     changeStatus(id) {
       changeStatus(id).then((response) => {
@@ -216,16 +261,14 @@ export default {
     handleEdit(row) {
       console.log(row);
       this.title = "编辑";
-      this.data_form.word = row.word
-      this.data_form.icon = row.icon
-      this.data_form.id = row.id
+      this.data_form.word = row.word;
+      this.data_form.icon = row.icon;
+      this.data_form.id = row.id;
       this.editFlag = true;
     },
   },
   created() {
     this.search();
-
-    
   },
 };
 </script>
