@@ -93,7 +93,7 @@ export default {
     getCode(){
       getCode({phone:this.loginForm.phone}).then(res=>{
           if(res.success){
-            alert(res.result)
+            this.$message.success('验证码已发送，注意查收')
           }
       })
     },

@@ -69,8 +69,12 @@
           <el-select v-model.trim="data_form.type" placeholder="请选择">
             <el-option label="横幅广告" :value="1"> </el-option>
             <el-option label="轮播广告" :value="2"> </el-option>
+            <el-option label="详情广告" :value="3"> </el-option>
           </el-select>
         </el-form-item>
+          <p v-show="data_form.type==1" class="tip">横幅广告图片建议像素 950*250</p>
+          <p v-show="data_form.type==2" class="tip">轮播广告图片建议像素 250*250</p>
+          <p v-show="data_form.type==3" class="tip">详情广告图片建议像素 670*75</p>
         <el-form-item label="顺序" v-if="data_form.type == 2">
           <el-input
             style="width: 100px"
@@ -79,7 +83,9 @@
         </el-form-item>
         <el-form-item label="图片">
           <imgUpload v-model.trim="data_form.filePath"></imgUpload>
+        
         </el-form-item>
+
         <!-- <el-form-item label="是否有效">
           <el-switch
             v-model.trim="data_form.isEnabled"
@@ -108,12 +114,8 @@
       </el-pagination>
     </div>
 
-    <el-dialog
-      title="图片预览"
-      :visible.sync="preViewImgFlag"
-      center
-    >
-      <img style="width:100%" :src="preViewImgSrc" alt="" />
+    <el-dialog title="图片预览" :visible.sync="preViewImgFlag" center>
+      <img style="width: 100%" :src="preViewImgSrc" alt="" />
     </el-dialog>
   </div>
 </template>
@@ -128,7 +130,7 @@ export default {
   },
   data() {
     return {
-      loading:false,
+      loading: false,
       preViewImgFlag: false,
       preViewImgSrc: "",
       title: "",
@@ -207,6 +209,9 @@ export default {
         case 2:
           return "轮播广告";
           break;
+        case 3:
+          return "详情广告";
+          break;
       }
     },
     fileLook(filePath) {
@@ -220,11 +225,10 @@ export default {
       });
     },
     search() {
-       this.loading=true;
+      this.loading = true;
       list({ ...this.paginationOption }).then((res) => {
-         this.loading=false;
+        this.loading = false;
         if (res.success) {
-          
           this.tableData = res.result.data;
         }
       });
@@ -254,5 +258,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped lang="scss">
+.tip {
+  // text-align: center;
+  color: lightcoral;
+  padding: 0;margin: 0;
+  margin-bottom: 20px;
+  margin-left: 150px;
+}
 </style>
